@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- 前台服务权限（保持 WebSocket 后台连接）-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- 震动权限（用于消息提醒）-->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:name=".DaDaApp"
+        android:allowBackup="true"
+        tools:replace="android:allowBackup"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.DaDaNew"
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config">
+
+        <activity
+            android:name=".ui.welcome.WelcomeActivity"
+            android:launchMode="singleTask"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.MainActivity"
+            android:launchMode="singleTask"
+            android:exported="true"/>
+
+        <activity
+            android:name=".ui.main.ImMainActivity"
+            android:launchMode="singleTask"
+            android:exported="true"/>
+
+        <activity
+            android:name=".ui.chat.WxChatActivity"
+            android:exported="true"/>
+
+        <!-- 语音通话界面 -->
+        <activity
+            android:name=".ui.call.CallActivity"
+            android:launchMode="singleTask"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:showOnLockScreen="true"
+            android:theme="@style/CallActivityTheme"
+            android:turnScreenOn="true" />
+
+        <activity
+            android:name=".widget.video.FullscreenVideoPlayerActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.discover.OnlineUsersActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.profile.UserProfileActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.friend.FriendRequestsActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.image.ImagePreviewActivity"
+            android:exported="false" />
+
+        <!-- 朋友圈主页 -->
+        <activity
+            android:name=".ui.moments.MomentsActivity"
+            android:exported="false" />
+
+        <!-- 发布朋友圈 -->
+        <activity
+            android:name=".ui.moments.PublishMomentActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+
+        <!-- 扫一扫 -->
+        <activity
+            android:name=".ui.scan.ScanActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:showOnLockScreen="true"
+            android:launchMode="singleTask"
+            android:theme="@style/CallActivityTheme"
+            android:turnScreenOn="true" />
+
+        <!-- 通用 WebView -->
+        <activity
+            android:name=".ui.common.WebViewActivity"
+            android:launchMode="singleTask"
+            android:exported="false" />
+
+        <!-- AI 智能助手 -->
+        <activity
+            android:name=".ui.aichat.AiChatActivity"
+            android:exported="false" />
+
+        <!-- WebSocket 后台服务 -->
+        <service
+            android:name=".network.websocket.WebSocketService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <!-- ============================== 极光推送 JPush ============================== -->
+        <!-- 自定义接收器：处理推送下发、点击跳转 -->
+        <!-- 注意：JPush 5.4.0+ 的 action 名是 RECEIVER_MESSAGE（多一个 R），不是 RECEIVE_MESSAGE -->
+        <receiver
+            android:name=".push.JPushReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="cn.jpush.android.intent.RECEIVER_MESSAGE" />
+                <category android:name="${JPUSH_PKGNAME}" />
+            </intent-filter>
+        </receiver>
+
+        <!-- JCore 必需的自定义 Service（JCore 2.0.0+ 要求） -->
+        <service
+            android:name=".push.JCoreService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":pushcore">
+            <intent-filter>
+                <action android:name="cn.jiguang.user.service.action" />
+            </intent-filter>
+        </service>
+
+        <!-- AppKey 配置（来自 build.gradle 的 manifestPlaceholders） -->
+        <meta-data
+            android:name="JPUSH_CHANNEL"
+            android:value="${JPUSH_CHANNEL}" />
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="${JPUSH_APPKEY}" />
+
+    </application>
+
+</manifest>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/im_nav_graph"
+    app:startDestination="@id/nav_chats">
+
+    <!-- 消息列表 -->
+    <fragment
+        android:id="@+id/nav_chats"
+        android:name="com.dada.app.ui.chatlist.ChatListFragment"
+        android:label="@string/tab_chats"
+        tools:layout="@layout/fragment_chat_list" />
+
+    <!-- 通讯录 -->
+    <fragment
+        android:id="@+id/nav_contacts"
+        android:name="com.dada.app.ui.contacts.ContactsFragment"
+        android:label="@string/tab_contacts"
+        tools:layout="@layout/fragment_contacts" />
+
+    <!-- 发现 -->
+    <fragment
+        android:id="@+id/nav_discover"
+        android:name="com.dada.app.ui.discover.DiscoverFragment"
+        android:label="@string/tab_discover"
+        tools:layout="@layout/fragment_discover" />
+
+    <!-- 我 -->
+    <fragment
+        android:id="@+id/nav_me"
+        android:name="com.dada.app.ui.settings.MeFragment"
+        android:label="@string/tab_me"
+        tools:layout="@layout/fragment_me" />
+
+</navigation>

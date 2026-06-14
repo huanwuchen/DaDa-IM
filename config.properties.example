@@ -1,0 +1,40 @@
+# ============================================================
+# DaDa IM 项目配置文件
+# ============================================================
+# 使用方法：
+#   1. 复制本文件为 config.properties:
+#      cp config.properties.example config.properties
+#   2. 填入你自己的配置值
+#   3. 将 config.properties 放入 app/src/main/assets/ 目录
+#   4. 同时在 gradle.properties 中填入相同的值（供 BuildConfig 使用）
+#
+# 注意：config.properties 和 gradle.properties 已被 .gitignore 排除，
+#       不会提交到 Git 仓库。
+# ============================================================
+
+# ========================= 服务端地址 =========================
+# HTTP API 地址（你的后端服务器地址）
+SERVER_BASE_URL=http://your-server-ip:8080
+# WebSocket 地址（你的后端服务器 WebSocket 地址）
+SERVER_WS_URL=ws://your-server-ip:8080
+
+# ========================= 极光推送 (JPush) =========================
+# 在 https://www.jiguang.cn/ 注册应用后获取
+JPUSH_APPKEY=your_jpush_appkey_here
+JPUSH_CHANNEL=developer-default
+
+# ========================= 腾讯云 TUICallKit =========================
+# 在 https://console.cloud.tencent.com/trtc/app-list 注册应用后获取
+# SDKAppID（数字）
+TUI_SDK_APP_ID=0
+# SecretKey（64位十六进制字符串）
+# 注意：生产环境应由服务端下发 UserSig，客户端不应存储 SecretKey
+TUI_SECRET_KEY=your_tui_secret_key_here
+
+# ========================= AI 助手 (MiMo) =========================
+# MiMo AI API 地址
+AI_API_URL=https://api.xiaomimimo.com/v1/chat/completions
+# MiMo AI 模型名称
+AI_MODEL=mimo-v2.5-pro
+# MiMo AI API Token
+AI_API_TOKEN=your_ai_api_token_here
