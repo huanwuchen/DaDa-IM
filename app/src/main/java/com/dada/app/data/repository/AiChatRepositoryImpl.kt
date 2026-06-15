@@ -1,7 +1,7 @@
 package com.dada.app.data.repository
 
-import android.util.Log
 import com.dada.app.BuildConfig
+import com.dada.core.common.utils.LogUtil
 import com.dada.core.database.dao.ChatMessageDao
 import com.dada.core.database.entity.ChatMessageEntity
 import com.dada.domain.aichat.repository.AiChatRepository
@@ -109,7 +109,7 @@ class AiChatRepositoryImpl @Inject constructor(
 
         call.enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                Log.e(TAG, "<<< 请求失败: ${e.message}", e)
+                LogUtil.e(TAG, "<<< 请求失败: ${e.message}", e)
                 trySend(AiStreamChunk(content = "请求失败: ${e.message}"))
                 close()
             }
@@ -118,7 +118,7 @@ class AiChatRepositoryImpl @Inject constructor(
             override fun onResponse(call: Call, response: Response) {
                 if (!response.isSuccessful) {
                     val errorBody = response.body?.string() ?: "无响应体"
-                    Log.e(TAG, "<<< 错误: ${response.code} $errorBody")
+                    LogUtil.e(TAG, "<<< 错误: ${response.code} $errorBody")
                     trySend(AiStreamChunk(content = "请求失败: HTTP ${response.code}"))
                     close()
                     return
@@ -126,7 +126,7 @@ class AiChatRepositoryImpl @Inject constructor(
 
                 val responseBody = response.body
                 if (responseBody == null) {
-                    Log.e(TAG, "<<< 错误: 响应体为空")
+                    LogUtil.e(TAG, "<<< 错误: 响应体为空")
                     trySend(AiStreamChunk(content = "请求失败: 响应为空"))
                     close()
                     return
@@ -168,11 +168,11 @@ class AiChatRepositoryImpl @Inject constructor(
                                 }
                             }
                         } catch (e: Exception) {
-                            Log.w(TAG, "<<< 解析失败: $data", e)
+                            LogUtil.w(TAG, "<<< 解析失败: $data", e)
                         }
                     }
                 } catch (e: IOException) {
-                    Log.e(TAG, "<<< 流读取异常: ${e.message}", e)
+                    LogUtil.e(TAG, "<<< 流读取异常: ${e.message}", e)
                     if (fullContent.isEmpty()) {
                         trySend(AiStreamChunk(content = "读取响应失败: ${e.message}"))
                     }

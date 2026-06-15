@@ -26,6 +26,10 @@ object LogUtil {
         if (enabled) Log.w(tag, msg)
     }
 
+    fun w(tag: String, msg: String, tr: Throwable) {
+        if (enabled) Log.w(tag, msg, tr)
+    }
+
     fun i(tag: String, msg: String) {
         if (enabled) Log.i(tag, msg)
     }
