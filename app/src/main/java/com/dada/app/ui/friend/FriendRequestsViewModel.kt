@@ -2,12 +2,10 @@ package com.dada.app.ui.friend
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.dada.core.common.base.BaseViewModel
 import com.dada.core.network.model.FriendRequest
 import com.dada.domain.friend.repository.FriendRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -16,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FriendRequestsViewModel @Inject constructor(
     private val friendRepository: FriendRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _friendRequests = MutableLiveData<List<FriendRequest>>()
     val friendRequests: LiveData<List<FriendRequest>> = _friendRequests
@@ -34,7 +32,7 @@ class FriendRequestsViewModel @Inject constructor(
      * 加载好友请求列表
      */
     fun loadFriendRequests(userId: Long) {
-        viewModelScope.launch {
+        launch {
             _loading.value = true
             val result = friendRepository.getFriendRequests(userId)
             _loading.value = false
@@ -51,7 +49,7 @@ class FriendRequestsViewModel @Inject constructor(
      * 同意好友请求
      */
     fun acceptRequest(requestId: Long, userId: Long) {
-        viewModelScope.launch {
+        launch {
             _loading.value = true
             val result = friendRepository.acceptFriendRequest(requestId, userId)
             _loading.value = false
@@ -68,7 +66,7 @@ class FriendRequestsViewModel @Inject constructor(
      * 拒绝好友请求
      */
     fun rejectRequest(requestId: Long, userId: Long) {
-        viewModelScope.launch {
+        launch {
             _loading.value = true
             val result = friendRepository.rejectFriendRequest(requestId, userId)
             _loading.value = false

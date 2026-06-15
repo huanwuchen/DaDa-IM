@@ -202,12 +202,12 @@ class MomentsAdapter(
          * 渲染图片网格 / 视频缩略图
          */
         private fun renderMedia(item: Moment) {
+            val videoUrl = item.videoUrl
             when {
-                !item.videoUrl.isNullOrBlank() -> {
+                !videoUrl.isNullOrBlank() -> {
                     binding.flVideo.visibility = View.VISIBLE
                     binding.rvImages.visibility = View.GONE
 
-                    val videoUrl = item.videoUrl!!
                     binding.ivVideoThumb.loadImage(videoUrl, imageLoader) {
                         transform = ImageRequest.Transform.CenterCrop
                     }

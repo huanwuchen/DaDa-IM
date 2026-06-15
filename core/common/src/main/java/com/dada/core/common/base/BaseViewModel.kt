@@ -2,6 +2,9 @@ package com.dada.core.common.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.dada.core.common.utils.LogUtil
+import com.dada.core.common.utils.NetworkErrorMapper
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -42,22 +45,31 @@ abstract class BaseViewModel : ViewModel() {
     // ============================== 协程辅助 ==============================
 
     /**
-     * 在 viewModelScope 中启动一个协程
+     * 防御纵深：即使业务方忘记 try/catch，未捕获的协程异常也只走 [postError] + 日志，
+     * 不会让 [Dispatchers.Main] 的默认 handler 把 App 干崩。
+     */
+    private val defaultExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        LogUtil.e(TAG, "未捕获协程异常: ${throwable.javaClass.simpleName}", throwable)
+        postError(NetworkErrorMapper.toMessage(throwable))
+    }
+
+    /**
+     * 在 viewModelScope 中启动一个协程（带未捕获异常兜底）
      */
     protected fun launch(block: suspend CoroutineScope.() -> Unit): Job =
-        viewModelScope.launch { block() }
+        viewModelScope.launch(defaultExceptionHandler) { block() }
 
     /**
      * 在 IO 调度器中启动协程（适合数据库 / 网络 / 文件等阻塞工作）
      */
     protected fun launchIO(block: suspend CoroutineScope.() -> Unit): Job =
-        viewModelScope.launch(Dispatchers.IO) { block() }
+        viewModelScope.launch(Dispatchers.IO + defaultExceptionHandler) { block() }
 
     /**
      * 自动管理 loading 状态 + try/catch 的工具方法
      *
      * @param showLoading 是否在执行期间触发 loading 状态
-     * @param onError     可选的错误处理；为 null 时使用默认（[postError]）
+     * @param onError     可选的错误处理；为 null 时使用 [NetworkErrorMapper] 映射后的友好文案
      */
     protected fun runAsync(
         showLoading: Boolean = true,
@@ -68,7 +80,8 @@ abstract class BaseViewModel : ViewModel() {
         try {
             block()
         } catch (e: Exception) {
-            if (onError != null) onError(e) else postError(e.message ?: "未知错误")
+            LogUtil.e(TAG, "runAsync 捕获异常: ${e.javaClass.simpleName}", e)
+            if (onError != null) onError(e) else postError(NetworkErrorMapper.toMessage(e))
         } finally {
             if (showLoading) hideLoading()
         }
@@ -96,5 +109,9 @@ abstract class BaseViewModel : ViewModel() {
 
     protected fun postToast(message: String) {
         _toastEvent.tryEmit(message)
+    }
+
+    private companion object {
+        private const val TAG = "BaseViewModel"
     }
 }

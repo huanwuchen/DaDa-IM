@@ -6,11 +6,14 @@ import com.dada.core.database.dao.ChatMessageDao
 import com.dada.core.database.entity.ChatMessageEntity
 import com.dada.domain.aichat.repository.AiChatRepository
 import com.dada.domain.aichat.repository.AiStreamChunk
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaType
@@ -39,6 +42,12 @@ class AiChatRepositoryImpl @Inject constructor(
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(60, TimeUnit.SECONDS)
         .build()
+
+    /**
+     * 用于在 OkHttp 回调线程外执行 Room 写入。
+     * 不能用 runBlocking 直接阻塞 OkHttp 调度线程（会拖慢其他网络请求）。
+     */
+    private val ioScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private var currentCall: Call? = null
 
@@ -115,7 +124,14 @@ class AiChatRepositoryImpl @Inject constructor(
                     return
                 }
 
-                val reader = BufferedReader(InputStreamReader(response.body!!.byteStream()))
+                val responseBody = response.body
+                if (responseBody == null) {
+                    Log.e(TAG, "<<< 错误: 响应体为空")
+                    trySend(AiStreamChunk(content = "请求失败: 响应为空"))
+                    close()
+                    return
+                }
+                val reader = BufferedReader(InputStreamReader(responseBody.byteStream()))
                 val fullContent = StringBuilder()
                 val fullReasoning = StringBuilder()
 
@@ -165,10 +181,11 @@ class AiChatRepositoryImpl @Inject constructor(
                     response.close()
                 }
 
-                // 流结束：持久化最终 AI 回复（OkHttp 回调中用 runBlocking 调 suspend）
+                // 流结束：持久化最终 AI 回复
+                // 不在 OkHttp 回调线程内 runBlocking 写 Room（会阻塞调度器线程，影响其他网络请求）
                 val finalContent = fullContent.toString()
                 if (finalContent.isNotEmpty()) {
-                    runBlocking {
+                    ioScope.launch {
                         dao.updateMessage(ChatMessageEntity(
                             id = aiEntityId,
                             role = "AI",

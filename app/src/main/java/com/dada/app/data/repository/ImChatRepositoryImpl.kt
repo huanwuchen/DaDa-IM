@@ -232,7 +232,13 @@ class ImChatRepositoryImpl @Inject constructor(
     ) {
         val existing = conversationDao.getByPeerId(peer.id)
         val unread = (existing?.unreadCount ?: 0) + if (incUnread) 1 else 0
-        val shouldOverrideLast = existing == null || lastTime >= existing.lastMessageTime
+        // 当 existing == null 时 shouldOverrideLast 必为 true，进入新建分支；
+        // 否则 existing 非空，使用其字段做合并
+        val finalLast = if (existing == null || lastTime >= existing.lastMessageTime) {
+            Triple(lastContent, lastTime, lastType)
+        } else {
+            Triple(existing.lastMessage, existing.lastMessageTime, existing.lastMessageType)
+        }
 
         conversationDao.upsert(
             ImConversationEntity(
@@ -241,9 +247,9 @@ class ImChatRepositoryImpl @Inject constructor(
                     existing?.peerUsername ?: "用户${peer.id}"
                 },
                 peerAvatar = peer.avatar ?: existing?.peerAvatar,
-                lastMessage = if (shouldOverrideLast) lastContent else existing!!.lastMessage,
-                lastMessageTime = if (shouldOverrideLast) lastTime else existing!!.lastMessageTime,
-                lastMessageType = if (shouldOverrideLast) lastType else existing!!.lastMessageType,
+                lastMessage = finalLast.first,
+                lastMessageTime = finalLast.second,
+                lastMessageType = finalLast.third,
                 unreadCount = unread,
             )
         )

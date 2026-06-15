@@ -2,7 +2,6 @@ package com.dada.app.ui.contacts
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.dada.core.common.base.BaseViewModel
 import com.dada.core.common.utils.LogUtil
 import com.dada.core.database.UserPreferences
@@ -10,7 +9,6 @@ import com.dada.core.network.model.FriendInfo
 import com.dada.domain.friend.repository.FriendRepository
 import com.dada.domain.contact.repository.ImContactRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -38,7 +36,7 @@ class ContactsViewModel @Inject constructor(
      * 刷新好友列表
      */
     fun refresh() {
-        viewModelScope.launch {
+        launch {
             val userId = userPreferences.getUserId()
             if (userId <= 0) {
                 postError("请先登录")
@@ -61,7 +59,7 @@ class ContactsViewModel @Inject constructor(
      * 加载待处理的好友请求数量
      */
     private fun loadPendingRequestCount() {
-        viewModelScope.launch {
+        launch {
             val userId = userPreferences.getUserId()
             if (userId <= 0) return@launch
             val result = friendRepository.getFriendRequests(userId)

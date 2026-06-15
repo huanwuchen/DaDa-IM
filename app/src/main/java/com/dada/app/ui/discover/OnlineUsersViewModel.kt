@@ -2,14 +2,12 @@ package com.dada.app.ui.discover
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.dada.core.common.base.BaseViewModel
 import com.dada.core.database.UserPreferences
 import com.dada.core.network.model.OnlineUser
 import com.dada.domain.friend.repository.FriendRepository
 import com.dada.domain.user.repository.UserProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -20,7 +18,7 @@ class OnlineUsersViewModel @Inject constructor(
     private val userProfileRepository: UserProfileRepository,
     private val friendRepository: FriendRepository,
     private val userPreferences: UserPreferences
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _onlineUsers = MutableLiveData<List<OnlineUser>>()
     val onlineUsers: LiveData<List<OnlineUser>> = _onlineUsers
@@ -42,7 +40,7 @@ class OnlineUsersViewModel @Inject constructor(
      * 加载在线用户，同时获取好友列表进行过滤
      */
     fun loadOnlineUsers() {
-        viewModelScope.launch {
+        launch {
             _loading.value = true
 
             // 并行获取在线用户和好友列表
@@ -69,7 +67,7 @@ class OnlineUsersViewModel @Inject constructor(
      * 添加好友
      */
     fun addFriend(fromUserId: Long, toUserId: Long, message: String?) {
-        viewModelScope.launch {
+        launch {
             _loading.value = true
             val result = friendRepository.sendFriendRequest(fromUserId, toUserId, message)
             _loading.value = false

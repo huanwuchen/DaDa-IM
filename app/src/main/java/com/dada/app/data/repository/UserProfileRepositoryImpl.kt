@@ -20,8 +20,9 @@ class UserProfileRepositoryImpl @Inject constructor(
 
     override suspend fun getUserProfile(userId: Long): Result<UserProfile> = try {
         val response = userApiService.getUserProfile(userId)
-        if (response.isSuccess && response.data != null) {
-            Result.success(response.data!!)
+        val data = response.data
+        if (response.isSuccess && data != null) {
+            Result.success(data)
         } else {
             Result.failure(Exception(response.message ?: "获取用户信息失败"))
         }
@@ -41,7 +42,8 @@ class UserProfileRepositoryImpl @Inject constructor(
         val requestBody = imageFile.asRequestBody("image/*".toMediaTypeOrNull())
         val part = MultipartBody.Part.createFormData("file", imageFile.name, requestBody)
         val response = userApiService.uploadAvatar(userId, part)
-        if (response.isSuccess && response.data != null) Result.success(response.data!!.url)
+        val data = response.data
+        if (response.isSuccess && data != null) Result.success(data.url)
         else Result.failure(Exception(response.message ?: "上传失败"))
     } catch (e: Exception) {
         Result.failure(e)
@@ -49,7 +51,8 @@ class UserProfileRepositoryImpl @Inject constructor(
 
     override suspend fun searchUsers(keyword: String, userId: Long): Result<List<SearchUserItem>> = try {
         val response = userApiService.searchUsers(keyword, userId)
-        if (response.isSuccess && response.data != null) Result.success(response.data!!)
+        val data = response.data
+        if (response.isSuccess && data != null) Result.success(data)
         else Result.failure(Exception(response.message ?: "搜索失败"))
     } catch (e: Exception) {
         Result.failure(e)
@@ -57,8 +60,9 @@ class UserProfileRepositoryImpl @Inject constructor(
 
     override suspend fun getOnlineUsers(): Result<List<OnlineUser>> = try {
         val response = userApiService.getOnlineUsers()
-        if (response.isSuccess && response.data != null) {
-            val onlineUsers = response.data!!.users.map { imUser ->
+        val data = response.data
+        if (response.isSuccess && data != null) {
+            val onlineUsers = data.users.map { imUser ->
                 OnlineUser(
                     id = imUser.id,
                     username = imUser.username,
@@ -87,7 +91,8 @@ class UserProfileRepositoryImpl @Inject constructor(
         val requestBody = imageFile.asRequestBody("image/*".toMediaTypeOrNull())
         val part = MultipartBody.Part.createFormData("file", imageFile.name, requestBody)
         val response = userApiService.uploadCoverImage(userId, part)
-        if (response.isSuccess && response.data != null) Result.success(response.data!!.url)
+        val data = response.data
+        if (response.isSuccess && data != null) Result.success(data.url)
         else Result.failure(Exception(response.message ?: "上传封面图失败"))
     } catch (e: Exception) {
         Result.failure(e)

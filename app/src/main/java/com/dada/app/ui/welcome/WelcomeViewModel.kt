@@ -3,6 +3,7 @@ package com.dada.app.ui.welcome
 import com.dada.app.BuildConfig
 import com.dada.app.DaDaApp
 import com.dada.core.common.utils.LogUtil
+import com.dada.core.common.utils.NetworkErrorMapper
 import com.dada.core.common.base.BaseViewModel
 import com.dada.core.network.api.ImApiService
 import com.dada.core.network.model.ImUser
@@ -45,7 +46,7 @@ class WelcomeViewModel @Inject constructor(
         registering = true
         runAsync(showLoading = false, onError = { e ->
             registering = false
-            _uiState.value = WelcomeUiState(error = "网络错误: ${e.message}")
+            _uiState.value = WelcomeUiState(error = NetworkErrorMapper.toMessage(e))
             LogUtil.e(TAG, "注册异常", e)
         }) {
             _uiState.value = WelcomeUiState(isLoading = true)
@@ -56,9 +57,9 @@ class WelcomeViewModel @Inject constructor(
                 avatar = null,
             )
             val response = imApiService.register(request)
+            val user = response.data
 
-            if (response.isSuccess && response.data != null) {
-                val user = response.data!!
+            if (response.isSuccess && user != null) {
                 // 写入 Room + MMKV
                 userRepository.save(
                     userId = user.id,

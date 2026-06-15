@@ -34,6 +34,14 @@
         android:theme="@style/Theme.DaDaNew"
         android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/network_security_config">
+        <!--
+            TODO: 开源/上线前收紧明文流量配置。
+            目前 usesCleartextTraffic="true" 是为了支持局域网 HTTP/WS 调试（如 192.168.x.x、10.0.2.2）。
+            生产环境建议：
+              1. 仅在 debug buildType 保留此项，release 关闭；
+              2. 或在 network_security_config.xml 中限定具体 domain，而非全局放开。
+            参考：https://developer.android.com/training/articles/security-config
+        -->
 
         <activity
             android:name=".ui.welcome.WelcomeActivity"

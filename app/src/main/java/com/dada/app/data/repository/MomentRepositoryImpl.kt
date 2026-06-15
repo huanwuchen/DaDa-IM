@@ -23,17 +23,17 @@ class MomentRepositoryImpl @Inject constructor(
         size: Int,
     ): Result<MomentFeedResponse> = runCatching {
         val resp = api.getFeed(page = page, size = size, userId = userId)
-        resp.data ?: throw IllegalStateException(resp.message)
+        resp.data ?: error(resp.message ?: "获取动态失败")
     }
 
     override suspend fun publish(request: PublishMomentRequest): Result<Moment> = runCatching {
         val resp = api.publish(request)
-        resp.data ?: throw IllegalStateException(resp.message)
+        resp.data ?: error(resp.message ?: "发布失败")
     }
 
     override suspend fun toggleLike(momentId: Long, userId: Long): Result<LikeResult> = runCatching {
         val resp = api.toggleLike(momentId, LikeRequest(userId))
-        resp.data ?: throw IllegalStateException(resp.message)
+        resp.data ?: error(resp.message ?: "点赞失败")
     }
 
     override suspend fun comment(
@@ -47,12 +47,11 @@ class MomentRepositoryImpl @Inject constructor(
             momentId,
             CommentRequest(userId, content, replyToUserId, replyToCommentId)
         )
-        resp.data ?: throw IllegalStateException(resp.message)
+        resp.data ?: error(resp.message ?: "评论失败")
     }
 
     override suspend fun delete(momentId: Long, userId: Long): Result<Unit> = runCatching {
         val resp = api.delete(momentId, userId)
-        if (!resp.isSuccess) throw IllegalStateException(resp.message)
-        Unit
+        if (!resp.isSuccess) error(resp.message ?: "删除失败")
     }
 }

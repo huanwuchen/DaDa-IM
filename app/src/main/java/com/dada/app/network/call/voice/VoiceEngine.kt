@@ -446,6 +446,8 @@ class VoiceEngine {
                 if (read <= 0) {
                     // 读取失败，可能是录音器未就绪，稍等后重试
                     LogUtil.w(TAG, "AudioRecord.read 返回 $read，等待重试")
+                    // 此处运行在专用 Thread 中（非协程上下文），使用 Thread.sleep 是有意为之：
+                    // 音视频采集需要稳定的低延迟，避免协程调度引入抖动。
                     Thread.sleep(10)
                     continue
                 }
@@ -500,6 +502,7 @@ class VoiceEngine {
             try {
                 val read = audioRecord?.read(buffer, 0, FRAME_SIZE) ?: -1
                 if (read <= 0) {
+                    // 同 sendLoop：专用线程内的低延迟等待，避免协程调度抖动
                     Thread.sleep(10)
                     continue
                 }

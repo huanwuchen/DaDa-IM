@@ -389,8 +389,9 @@ class CallManager @Inject constructor(
             pendingAudioRecvSocket = null
             LogUtil.d(TAG, "启动音频引擎: target=${remote.audioIp}:${remote.audioPort}, local=${audioSocket.localPort}")
             voiceEngine?.stop()
-            voiceEngine = VoiceEngine()
-            voiceEngine!!.start(remote.audioIp, remote.audioPort, audioSocket, context)
+            val engine = VoiceEngine()
+            voiceEngine = engine
+            engine.start(remote.audioIp, remote.audioPort, audioSocket, context)
         } else {
             LogUtil.w(TAG, "startEngines: pendingAudioRecvSocket 为空")
         }
@@ -407,8 +408,9 @@ class CallManager @Inject constructor(
                 LogUtil.d(TAG, "启动视频引擎: target=${remote.videoIp}:${remote.videoPort}, " +
                         "local=${videoSocket.localPort}, 编码=$videoEncodingMode")
                 videoEngine?.stop()
-                videoEngine = VideoEngine(owner)
-                videoEngine!!.start(
+                val engine = VideoEngine(owner)
+                videoEngine = engine
+                engine.start(
                     targetIp = remote.videoIp,
                     targetPort = remote.videoPort,
                     recvSocket = videoSocket,
@@ -441,8 +443,9 @@ class CallManager @Inject constructor(
         // 启动音频引擎（WebSocket 模式）
         LogUtil.d(TAG, "启动 WebSocket 音频引擎")
         voiceEngine?.stop()
-        voiceEngine = VoiceEngine()
-        voiceEngine!!.startWebSocket(wsSender, context)
+        val voice = VoiceEngine()
+        voiceEngine = voice
+        voice.startWebSocket(wsSender, context)
 
         // 启动视频引擎（WebSocket 模式，仅视频通话时）
         val callType = _callInfo.value.callType
@@ -452,8 +455,9 @@ class CallManager @Inject constructor(
             if (cameraView != null && owner != null) {
                 LogUtil.d(TAG, "启动 WebSocket 视频引擎, 编码=$videoEncodingMode")
                 videoEngine?.stop()
-                videoEngine = VideoEngine(owner)
-                videoEngine!!.startWebSocket(
+                val video = VideoEngine(owner)
+                videoEngine = video
+                video.startWebSocket(
                     wsSender = wsSender,
                     cameraView = cameraView,
                     remoteSurface = remoteSurfaceView,

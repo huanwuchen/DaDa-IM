@@ -30,7 +30,8 @@ class FriendRepositoryImpl @Inject constructor(
 
     override suspend fun getFriendRequests(userId: Long): Result<List<FriendRequest>> = try {
         val response = userApiService.getFriendRequests(userId)
-        if (response.isSuccess && response.data != null) Result.success(response.data!!)
+        val data = response.data
+        if (response.isSuccess && data != null) Result.success(data)
         else Result.failure(Exception(response.message ?: "获取失败"))
     } catch (e: Exception) {
         Result.failure(e)
@@ -56,7 +57,8 @@ class FriendRepositoryImpl @Inject constructor(
 
     override suspend fun getFriendList(userId: Long): Result<List<FriendInfo>> = try {
         val response = userApiService.getFriendList(userId)
-        if (response.isSuccess && response.data != null) Result.success(response.data!!)
+        val data = response.data
+        if (response.isSuccess && data != null) Result.success(data)
         else Result.failure(Exception(response.message ?: "获取失败"))
     } catch (e: Exception) {
         Result.failure(e)
@@ -72,7 +74,8 @@ class FriendRepositoryImpl @Inject constructor(
 
     override suspend fun checkFriend(userId: Long, targetId: Long): Result<Boolean> = try {
         val response = userApiService.checkFriend(userId, targetId)
-        if (response.isSuccess && response.data != null) Result.success(response.data!!.isFriend)
+        val data = response.data
+        if (response.isSuccess && data != null) Result.success(data.isFriend)
         else Result.failure(Exception(response.message ?: "检查失败"))
     } catch (e: Exception) {
         Result.failure(e)

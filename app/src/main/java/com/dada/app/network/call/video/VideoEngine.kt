@@ -120,14 +120,15 @@ class VideoEngine(private val lifecycleOwner: LifecycleOwner) {
         this.encodingMode = mode
         this.recvSocket = recvSocket
         this.remoteSurface = remoteSurface
-        this.sendSocket = DatagramSocket()
+        val socket = DatagramSocket()
+        this.sendSocket = socket
 
         // 调大 socket 缓冲区（1080P 数据量大，默认缓冲区会爆）
         // 2MB 足够容纳几帧 1080P 的数据
         try {
-            sendSocket?.sendBufferSize = 2 * 1024 * 1024
+            socket.sendBufferSize = 2 * 1024 * 1024
             recvSocket.receiveBufferSize = 2 * 1024 * 1024
-            LogUtil.d(TAG, "Socket 缓冲区: send=${sendSocket?.sendBufferSize}, " +
+            LogUtil.d(TAG, "Socket 缓冲区: send=${socket.sendBufferSize}, " +
                     "recv=${recvSocket.receiveBufferSize}")
         } catch (e: Exception) {
             LogUtil.w(TAG, "调整 socket 缓冲区失败: ${e.message}")
@@ -139,7 +140,7 @@ class VideoEngine(private val lifecycleOwner: LifecycleOwner) {
             // 采集到的 YUV + 真实尺寸放入队列
             yuvQueue.offer(YuvFrame(yuv, w, h))
         }
-        sender = PacketSender(sendSocket!!, InetAddress.getByName(targetIp), targetPort)
+        sender = PacketSender(socket, InetAddress.getByName(targetIp), targetPort)
         receiver = PacketReceiver(recvSocket) { frameMode, frameData ->
             handleReceivedFrame(frameMode, frameData)
         }
@@ -437,6 +438,7 @@ class VideoEngine(private val lifecycleOwner: LifecycleOwner) {
 
             // 节流
             if (chunkIndex > 0 && chunkIndex % 32 == 0) {
+                // 视频分片发送线程为专用 Thread，避免协程调度对实时编码造成抖动
                 Thread.sleep(1)
             }
         }

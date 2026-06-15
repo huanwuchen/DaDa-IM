@@ -38,9 +38,10 @@ class ImContactRepositoryImpl @Inject constructor(
     override suspend fun refreshOnlineUsers(): Result<List<ImContactEntity>> {
         return try {
             val response = imApiService.getOnlineUsers()
-            if (response.isSuccess && response.data != null) {
+            val data = response.data
+            if (response.isSuccess && data != null) {
                 val myUserId = userPreferences.getUserId()
-                val entities = response.data!!.users
+                val entities = data.users
                     .filter { it.id != myUserId }
                     .map { it.toEntity() }
                 contactDao.replaceAll(entities)
@@ -81,8 +82,8 @@ class ImContactRepositoryImpl @Inject constructor(
     override suspend fun batchRefreshContacts(userIds: List<Long>) {
         if (userIds.isEmpty()) return
         val response = userApiService.getBatchUserInfo(BatchUserInfoRequest(userIds))
-        if (!response.isSuccess || response.data == null) return
-        val users = response.data!!
+        val users = response.data
+        if (!response.isSuccess || users == null) return
         // 更新联系人表
         val entities = users.map { user ->
             ImContactEntity(

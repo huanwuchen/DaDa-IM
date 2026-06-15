@@ -151,8 +151,9 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun takePicture() {
-        tempPhotoFile = File(cacheDir, "temp_avatar_${System.currentTimeMillis()}.jpg")
-        val uri = FileProvider.getUriForFile(this, "${packageName}.fileprovider", tempPhotoFile!!)
+        val photoFile = File(cacheDir, "temp_avatar_${System.currentTimeMillis()}.jpg")
+        tempPhotoFile = photoFile
+        val uri = FileProvider.getUriForFile(this, "${packageName}.fileprovider", photoFile)
         takePictureLauncher.launch(uri)
     }
 

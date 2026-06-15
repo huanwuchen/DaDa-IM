@@ -75,6 +75,7 @@ class PacketSender(
 
                 // 节流：每 32 个分片让出 CPU 让接收端有机会处理
                 // 1080P 单帧可能有几百个分片，瞬间打满 socket 缓冲区会导致大量丢包
+                // 这里运行在专用发送线程，使用 Thread.sleep 避免协程调度引入抖动
                 if (chunkIndex > 0 && chunkIndex % 32 == 0) {
                     Thread.sleep(1)
                 }
