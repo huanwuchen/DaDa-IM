@@ -79,12 +79,4 @@ class OnlineUsersViewModel @Inject constructor(
             }
         }
     }
-
-    /**
-     * 检查是否是好友
-     */
-    suspend fun checkIsFriend(userId: Long, targetId: Long): Boolean {
-        val result = friendRepository.checkFriend(userId, targetId)
-        return result.getOrDefault(false)
-    }
 }
