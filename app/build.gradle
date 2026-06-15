@@ -30,7 +30,7 @@ android {
         ]
         // 仅打包当前架构，避免 JPush 多 ABI 体积过大
         ndk {
-            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
         }
 
         // ============================== 可配置项 (从 gradle.properties 读取) ==============================
@@ -56,10 +56,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
         }
-    }
-
-    lint {
-        disable 'NullSafeMutableLiveData'
     }
 
     compileOptions {
