@@ -3,6 +3,9 @@ package com.dada.app.data.repository
 import com.dada.core.database.UserPreferences
 import com.dada.core.database.dao.ImUserProfileDao
 import com.dada.core.database.entity.ImUserProfileEntity
+import com.dada.core.network.api.ImApiService
+import com.dada.core.network.model.ImUser
+import com.dada.core.network.model.RegisterRequest
 import com.dada.domain.user.repository.ImUserRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -19,11 +22,37 @@ import javax.inject.Singleton
 class ImUserRepositoryImpl @Inject constructor(
     private val profileDao: ImUserProfileDao,
     private val userPreferences: UserPreferences,
+    private val imApiService: ImApiService,
 ) : ImUserRepository {
 
     override fun observe(): Flow<ImUserProfileEntity?> = profileDao.observe()
 
     override suspend fun get(): ImUserProfileEntity? = profileDao.get()
+
+    override suspend fun register(
+        username: String,
+        avatar: String?,
+    ): Result<ImUser> = runCatching {
+        val response = imApiService.register(
+            RegisterRequest(
+                deviceId = userPreferences.generateDeviceId(),
+                username = username,
+                avatar = avatar,
+            )
+        )
+        val user = response.data
+        if (!response.isSuccess || user == null) {
+            error(response.message.ifBlank { "注册失败" })
+        }
+        save(
+            userId = user.id,
+            deviceId = user.deviceId,
+            username = user.username,
+            avatar = user.avatar,
+            coverImage = user.coverImage,
+        )
+        user
+    }
 
     override suspend fun save(
         userId: Long,
