@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 朋友圈操作弹窗（仿微信：横向图标 + 文字） -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/bg_moment_popup"
+    android:paddingVertical="6dp"
+    android:paddingHorizontal="4dp"
+    android:gravity="center_vertical">
+
+    <!-- 赞 -->
+    <LinearLayout
+        android:id="@+id/btn_like"
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
+        android:gravity="center"
+        android:background="?attr/selectableItemBackground"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:contentDescription="赞"
+            android:src="@drawable/ic_moment_like" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="赞"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- 分隔线 -->
+    <View
+        android:layout_width="0.5dp"
+        android:layout_height="22dp"
+        android:background="#50FFFFFF" />
+
+    <!-- 评论 -->
+    <LinearLayout
+        android:id="@+id/btn_comment"
+        android:layout_width="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:layout_height="26dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:contentDescription="评论"
+            android:src="@drawable/ic_moment_comment" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="评论"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+</LinearLayout>

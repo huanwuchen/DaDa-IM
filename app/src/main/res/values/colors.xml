@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="primary">#FF6B4EFF</color>
+    <color name="primary_dark">#FF5A3FE8</color>
+    <color name="primary_light">#FF8B75FF</color>
+    <color name="background">#FFF5F5F5</color>
+    <color name="card_bg">#FFFFFFFF</color>
+    <color name="text_primary">#FF1A1A1A</color>
+    <color name="text_secondary">#FF999999</color>
+    <color name="text_hint">#FFCCCCCC</color>
+    <color name="divider">#FFEEEEEE</color>
+    <color name="error">#FFFF4444</color>
+    <color name="success">#FF4CAF50</color>
+
+    <!-- WeChat chat -->
+    <color name="wechat_bg">#FFF6F6F6</color>
+    <color name="wechat_toolbar">#FFFFFFFF</color>
+    <color name="wechat_input_bg">#FFF7F7F7</color>
+    <color name="wechat_input_field">#FFFFFFFF</color>
+    <color name="wechat_divider">#FFE5E5E5</color>
+    <color name="wechat_bubble_me">#FF95EC69</color>
+    <color name="wechat_bubble_other">#FFFFFFFF</color>
+    <color name="wechat_voice_button_normal">#FFFFFFFF</color>
+    <color name="wechat_voice_button_pressed">#FFCCCCCC</color>
+    <color name="wechat_text_dark">#FF111111</color>
+    <color name="wechat_text_time">#FF888888</color>
+
+    <!-- IM 绿色主题（自定义品牌色）-->
+    <color name="im_green">#FF07C160</color>
+    <color name="im_green_dark">#FF06AD56</color>
+    <color name="im_green_light">#FF1AAD19</color>
+    <color name="im_nav_normal">#FF7F7F7F</color>
+    <color name="im_nav_bg">#FFFFFFFF</color>
+
+    <!-- ZXing 扫一扫自定义颜色 -->
+    <color name="zxing_transparent">#00000000</color>
+    <color name="zxing_status_text">#FFFFFF</color>
+
+    <!-- 朋友圈发布页图片网格 -->
+    <color name="moments_image_placeholder">#FFEEEEEE</color>
+    <color name="moments_pick_button_bg">#FFF2F2F2</color>
+</resources>

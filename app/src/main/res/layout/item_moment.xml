@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  朋友圈单条动态（仿微信）
+
+  左侧头像 + 右侧内容区（昵称/正文/图片/时间操作/点赞评论）
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:orientation="horizontal"
+    android:paddingStart="12dp"
+    android:paddingTop="12dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="0dp">
+
+    <!-- 头像 -->
+    <ImageView
+        android:id="@+id/iv_avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:contentDescription="头像"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_default_avatar" />
+
+    <!-- 右侧内容 -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- 昵称 -->
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#576B95"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:text="张三" />
+
+        <!-- 正文 -->
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:lineSpacingExtra="2dp"
+            android:textColor="#111111"
+            android:textSize="15sp"
+            tools:text="今天天气真好，出来走走~" />
+
+        <!-- 图片九宫格 -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_images"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:overScrollMode="never"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <!-- 视频缩略图（与图片二选一） -->
+        <FrameLayout
+            android:id="@+id/fl_video"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            tools:visibility="gone">
+
+            <ImageView
+                android:id="@+id/iv_video_thumb"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#000000"
+                android:contentDescription="视频"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_gravity="center"
+                android:alpha="0.8"
+                android:contentDescription="播放"
+                android:src="@drawable/ic_video_call" />
+        </FrameLayout>
+
+        <!-- 位置 -->
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:drawablePadding="2dp"
+            android:textColor="#999999"
+            android:textSize="12sp"
+            android:visibility="gone"
+            tools:text="北京市·朝阳区"
+            tools:visibility="visible" />
+
+        <!-- 时间 + 操作菜单 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#B0B0B0"
+                android:textSize="12sp"
+                tools:text="3 分钟前" />
+
+            <!-- 操作按钮（点赞/评论） -->
+            <TextView
+                android:id="@+id/btn_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:paddingStart="10dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="4dp"
+                android:text="···"
+                android:textColor="#4C4C4C"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/btn_delete"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="6dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="删除"
+                android:padding="4dp"
+                android:src="@drawable/ic_delete"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </LinearLayout>
+
+        <!-- 点赞 + 评论容器 -->
+        <LinearLayout
+            android:id="@+id/ll_interactions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="#F3F3F5"
+            android:orientation="vertical"
+            android:paddingStart="8dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="6dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <!-- 点赞列表 -->
+            <TextView
+                android:id="@+id/tv_likes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="2dp"
+                android:textColor="#576B95"
+                android:textSize="13sp"
+                android:visibility="gone"
+                tools:text="❤ 李四, 王五"
+                tools:visibility="visible" />
+
+            <!-- 分隔线 -->
+            <View
+                android:id="@+id/divider_likes_comments"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:background="#E5E5E5"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <!-- 评论列表（动态生成 TextView 直接 add） -->
+            <LinearLayout
+                android:id="@+id/ll_comments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </LinearLayout>
+
+        <!-- 底部分隔线 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="12dp"
+            android:background="#ECECEC" />
+    </LinearLayout>
+</LinearLayout>

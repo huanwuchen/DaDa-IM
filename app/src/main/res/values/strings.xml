@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">搭搭新版</string>
+
+    <!-- 视频播放器 -->
+    <string name="video_player_loading">正在缓冲…</string>
+    <string name="video_player_error">播放错误，请重试</string>
+    <string name="video_player_retry">点击重试</string>
+
+    <!-- 智能搜索 -->
+    <string name="smart_search_hint">搜索…</string>
+    <string name="smart_search_loading">搜索中…</string>
+    <string name="library_name">StfalconImageViewer</string>
+
+    <!-- 朋友圈发布 -->
+    <string name="moments_add_image">添加图片</string>
+
+</resources>

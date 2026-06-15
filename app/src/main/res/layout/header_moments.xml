@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  朋友圈头部（仿微信）
+
+  - 顶部大背景图
+  - 右下角：昵称 + 头像（叠在背景图下方）
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipChildren="false">
+
+    <!-- 背景图 -->
+    <ImageView
+        android:id="@+id/iv_cover"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:background="#393A3E"
+        android:contentDescription="封面"
+        android:scaleType="centerCrop" />
+
+    <!-- 更换封面提示（点击时显示） -->
+    <TextView
+        android:id="@+id/tv_change_cover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="80dp"
+        android:background="#80000000"
+        android:drawablePadding="4dp"
+        android:paddingStart="10dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="6dp"
+        android:text="更换封面"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:visibility="gone" />
+
+    <!-- 昵称 + 头像（右下角叠在背景图下沿） -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="end|bottom"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
+
+        <!-- 昵称（在头像左侧） -->
+        <TextView
+            android:id="@+id/tv_my_username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="end"
+            android:maxLines="1"
+            android:shadowColor="#80000000"
+            android:shadowDx="0"
+            android:shadowDy="1"
+            android:shadowRadius="2"
+            android:textColor="@android:color/white"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            tools:text="张三" />
+
+        <!-- 头像（部分溢出到白色区域） -->
+        <ImageView
+            android:id="@+id/iv_my_avatar"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="10dp"
+            android:contentDescription="我的头像"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_default_avatar" />
+    </LinearLayout>
+
+    <!-- 底部留白：让头像下半部分露在背景图下方的白色区域 -->
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+</FrameLayout>

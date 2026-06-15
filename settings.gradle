@@ -1,0 +1,8 @@
+rootProject.name = "DaDaNew"
+include ':app'
+include ':core:common'
+include ':core:network'
+include ':core:database'
+include ':core:imageloader'
+include ':core:ui'
+include ':domain'

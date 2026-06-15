@@ -1,0 +1,31 @@
+# ============================================================
+# DaDa IM Gradle 配置
+# ============================================================
+# 使用方法：
+#   1. 复制本文件为 gradle.properties:
+#      cp gradle.properties.example gradle.properties
+#   2. 填入你自己的配置值
+# ============================================================
+
+org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+android.useAndroidX=true
+android.enableJetifier=true
+kotlin.code.style=official
+android.nonTransitiveRClass=true
+
+# ========================= 服务端地址 =========================
+SERVER_BASE_URL=http://your-server-ip:8080
+SERVER_WS_URL=ws://your-server-ip:8080
+
+# ========================= 极光推送 (JPush) =========================
+JPUSH_APPKEY=your_jpush_appkey_here
+JPUSH_CHANNEL=developer-default
+
+# ========================= 腾讯云 TUICallKit =========================
+TUI_SDK_APP_ID=0
+TUI_SECRET_KEY=your_tui_secret_key_here
+
+# ========================= AI 助手 (MiMo) =========================
+AI_API_URL=https://api.xiaomimimo.com/v1/chat/completions
+AI_MODEL=mimo-v2.5-pro
+AI_API_TOKEN=your_ai_api_token_here
